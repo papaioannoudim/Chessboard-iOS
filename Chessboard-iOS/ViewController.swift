@@ -46,14 +46,72 @@ class ViewController: UIViewController {
 //    @IBOutlet weak var g4_Button: UIButton!
 //    @IBOutlet weak var h4_Button: UIButton!
 
+//    var chessboardArray = [[Int]]()
+    var startingPointSelected: Bool = false
+    var isInFront: Bool = false
+    var isInLeft: Bool = false
     
+    var start_x: Int = 0
+    var start_y: Int = 0
+    
+    var finish_x: Int = 0
+    var finish_y: Int = 0
+    
+    var selectionsSum: Int = 0
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
-            
     }
+    
+//    func paths(x: Int, y: Int) -> <#return type#> {
+//        <#function body#>
+//    }
 
-    @IBAction func a1_buttonPressed(_ sender: Any) {}
+    @IBAction func a1_buttonPressed(_ sender: Any) {
+        if startingPointSelected == false {
+            start_x = 1
+            start_y = 1
+            selectionsSum += 1
+            startingPointSelected = true
+            print("Starting point is: \(start_x),\(start_y)")
+            print("SelectionsSum is: \(selectionsSum)")
+        } else {
+            if selectionsSum < 2 {
+                finish_x = 1
+                finish_y = 1
+                selectionsSum += 1
+                print("Finish point is: \(finish_x),\(finish_y)")
+                print("SelectionsSum is: \(selectionsSum)")
+
+                if start_x != finish_x && start_y != finish_y {
+                    // Check if the destination point is in left of the initial one.
+                    if start_x > finish_x {
+                        isInLeft = true
+                        print("The destination point is in left.")
+                    } else {
+                        isInLeft = false
+                        print("The destination point is in right.")
+                    }
+                    
+                    // Check if the destination point is in front of the initial one.
+                    if start_y > finish_y {
+                        isInFront = false
+                        print("The destination point is behind.")
+                    } else {
+                        isInFront = true
+                        print("The destination point is in front.")
+                    }
+                } else {
+                    print("Error: It's the same spot!")
+                }
+            }
+        }
+        
+        
+        
+    }
+    
     @IBAction func a2_buttonPressed(_ sender: Any) {}
     @IBAction func a3_buttonPressed(_ sender: Any) {}
     @IBAction func a4_buttonPressed(_ sender: Any) {}
