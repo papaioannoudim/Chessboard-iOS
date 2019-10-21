@@ -48,8 +48,6 @@ class ViewController: UIViewController {
 
 //    var chessboardArray = [[Int]]()
     var startingPointSelected: Bool = false
-    var isInFront: Bool = false
-    var isInLeft: Bool = false
     
     var start_x: Int = 0
     var start_y: Int = 0
@@ -80,29 +78,34 @@ class ViewController: UIViewController {
                 print("Finish point is: \(finish_x),\(finish_y)")
                 print("SelectionsSum is: \(selectionsSum)")
 
-                if start_x != finish_x && start_y != finish_y {
-                    // Check if the destination point is in front of the initial one.
-                    if start_y > finish_y {
-                        isInFront = false
-                        print("The destination point is behind.")
-                    } else {
-                        isInFront = true
-                        print("The destination point is in front.")
-                    }
-                    
-                    // Check if the destination point is in left of the initial one.
-                    if start_x > finish_x {
-                        isInLeft = true
-                        print("The destination point is in left.")
-                    } else {
-                        isInLeft = false
-                        print("The destination point is in right.")
-                    }
-                } else {
+                if start_x == finish_x && start_y == finish_y {
                     print("Error: It's the same spot!")
+                    // SHOW ERROR MESSAGE!
+                    return
                 }
             }
         }
+    }
+    
+    // To calculate possible moves:
+    func possibleMoves(mat: [[Int]], p: Int, q: Int) -> Int {
+        let X: [Int] = [ 2, 1, -1, -2, -2, -1, 1, 2 ]
+        let Y: [Int] = [ 1, 2, 2, 1, -1, -2, -2, -1 ]
+                
+        var count: Int = 0
+        
+//      Check if each possible move is valid or not
+        for i in 0 ..< 8 {
+            // Position of knight after move
+            let x = p + X[i];
+            let y = q + Y[i];
+            
+            if (x >= 0 && y >= 0 && x < 8 && y < 8 && mat[x][y] == 0) {
+                count += 1
+            }
+        }
+        // Return number of possible moves
+        return count;
     }
 
     // Buttons actions:
