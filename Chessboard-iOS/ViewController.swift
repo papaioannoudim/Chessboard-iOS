@@ -48,6 +48,8 @@ class ViewController: UIViewController {
 
 //    var chessboardArray = [[Int]]()
     var startingPointSelected: Bool = false
+    var pathsArray: [String] = []
+    var knightMovesCount = 0
     
     var start_x: Int = 0
     var start_y: Int = 0
@@ -56,6 +58,10 @@ class ViewController: UIViewController {
     var finish_y: Int = 0
     
     var selectionsSum: Int = 0
+    
+    // Knight's possible moves:
+    var X: [Int] = [ 2, 1, -1, -2, -2, -1, 1, 2 ]
+    var Y: [Int] = [ 1, 2, 2, 1, -1, -2, -2, -1 ]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -63,6 +69,7 @@ class ViewController: UIViewController {
     }
     
     func pathsForCoordinates(x: Int, y: Int) {
+        
         if startingPointSelected == false {
             start_x = x
             start_y = y
@@ -87,29 +94,67 @@ class ViewController: UIViewController {
         }
     }
     
+    /*
+        Make a function that takes coordinates x,y and calculate the possible moves.
+        Returns a new array.
+        Check if count >= 3.
+        Check if getting out of bounds.
+    */
+    func getPossibleMovesForCoordinates(x: Int, y: Int) {
+        var X_new: [Int] = Array(repeating: 0, count: 8)
+        var Y_new: [Int] = Array(repeating: 0, count: 8)
+        
+        if selectionsSum == 2 && knightMovesCount < 3 {
+            for i in 0...7 {
+                X_new[i] = X[i] + x
+                Y_new[i] = Y[i] + y
+                
+                // Check if new element's coordinates getting out of bounds. If that's so, skip this and move to the next element.
+                if X_new[i] < 1 || X_new[i] > 8 || Y_new[i] < 1 || Y_new[i] > 8 {
+                    print("\(X_new[i]) \(Y_new[i]) Coordinates out of bounds!!")
+                    continue
+                }
+                
+                // Check if this is the destination element.
+                if X_new[i] == finish_x && Y_new[i] == finish_y {
+                    let path = "\(x),\(y) -> \(X_new[i]),\(Y_new[i])"
+                    pathsArray.append(path)
+                    print("Path found successfully @ x,y: \(path)!")
+                    continue
+                }
+                print(X_new[i],Y_new[i])
+            }
+            knightMovesCount += 1
+            print("KnightMovesCount: \(knightMovesCount)")
+        }
+    }
+    
     // To calculate possible moves:
-    func possibleMoves(mat: [[Int]], p: Int, q: Int) -> Int {
-        let X: [Int] = [ 2, 1, -1, -2, -2, -1, 1, 2 ]
-        let Y: [Int] = [ 1, 2, 2, 1, -1, -2, -2, -1 ]
+    func possibleMoves(x: Int, y: Int) -> Int {
                 
         var count: Int = 0
         
 //      Check if each possible move is valid or not
         for i in 0 ..< 8 {
             // Position of knight after move
-            let x = p + X[i];
-            let y = q + Y[i];
+            let possible_x = x + X[i];
+            let possible_y = y + Y[i];
             
-            if (x >= 0 && y >= 0 && x < 8 && y < 8 && mat[x][y] == 0) {
+            if possible_x >= 1 && possible_x <= 8 && possible_y >= 1 && possible_y <= 8 {
                 count += 1
             }
+
         }
         // Return number of possible moves
         return count;
     }
 
     // Buttons actions:
-    @IBAction func a1_buttonPressed(_ sender: Any) {pathsForCoordinates(x: 1, y: 1)}
+    @IBAction func a1_buttonPressed(_ sender: Any) {
+        pathsForCoordinates(x: 1, y: 1)
+        getPossibleMovesForCoordinates(x: start_x, y: start_y)
+    }
+    
     @IBAction func a2_buttonPressed(_ sender: Any) {pathsForCoordinates(x: 1, y: 2)}
     @IBAction func a3_buttonPressed(_ sender: Any) {pathsForCoordinates(x: 1, y: 3)}
     @IBAction func a4_buttonPressed(_ sender: Any) {pathsForCoordinates(x: 1, y: 4)}
