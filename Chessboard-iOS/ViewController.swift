@@ -62,6 +62,8 @@ class ViewController: UIViewController {
     // Knight's possible moves:
     var X: [Int] = [ 2, 1, -1, -2, -2, -1, 1, 2 ]
     var Y: [Int] = [ 1, 2, 2, 1, -1, -2, -2, -1 ]
+    var X_new: [Int] = Array(repeating: 0, count: 8)
+    var Y_new: [Int] = Array(repeating: 0, count: 8)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -82,13 +84,22 @@ class ViewController: UIViewController {
                 finish_x = x
                 finish_y = y
                 selectionsSum += 1
-                print("Finish point is: \(finish_x),\(finish_y)")
+                print("Destination point is: \(finish_x),\(finish_y)")
                 print("SelectionsSum is: \(selectionsSum)")
 
                 if start_x == finish_x && start_y == finish_y {
                     print("Error: It's the same spot!")
                     // SHOW ERROR MESSAGE!
-                    return
+                } else {
+                    getPossibleMovesForCoordinates(x: start_x, y: start_y)
+                    setKnightMovesCount()
+                    
+                    print("Second move now...")
+                    for i in 0...7 {
+                        print("This is time: \(i). X_new is: \(X_new) and Y_new is: \(Y_new)")
+                        getPossibleMovesForCoordinates(x: X_new[i], y: Y_new[i])
+                    }
+                    
                 }
             }
         }
@@ -100,9 +111,12 @@ class ViewController: UIViewController {
         Check if count >= 3.
         Check if getting out of bounds.
     */
+    
+    
     func getPossibleMovesForCoordinates(x: Int, y: Int) {
-        var X_new: [Int] = Array(repeating: 0, count: 8)
-        var Y_new: [Int] = Array(repeating: 0, count: 8)
+//      Knight's possible moves:
+//      var X: [Int] = [ 2, 1, -1, -2, -2, -1, 1, 2 ]
+//      var Y: [Int] = [ 1, 2, 2, 1, -1, -2, -2, -1 ]
         
         if selectionsSum == 2 && knightMovesCount < 3 {
             for i in 0...7 {
@@ -124,10 +138,24 @@ class ViewController: UIViewController {
                 }
                 print(X_new[i],Y_new[i])
             }
-            knightMovesCount += 1
-            print("KnightMovesCount: \(knightMovesCount)")
+//            for k in 0...7 {
+//                X[k] = X_new[k]
+//                Y[k] = Y_new[k]
+//            }
         }
+        
+        
     }
+    
+    func setKnightMovesCount() {
+        knightMovesCount += 1
+        print("KnightMovesCount: \(knightMovesCount)\n")
+    }
+    
+    
+    
+    
+    
     
     // To calculate possible moves:
     func possibleMoves(x: Int, y: Int) -> Int {
@@ -150,11 +178,7 @@ class ViewController: UIViewController {
     }
 
     // Buttons actions:
-    @IBAction func a1_buttonPressed(_ sender: Any) {
-        pathsForCoordinates(x: 1, y: 1)
-        getPossibleMovesForCoordinates(x: start_x, y: start_y)
-    }
-    
+    @IBAction func a1_buttonPressed(_ sender: Any) {pathsForCoordinates(x: 1, y: 1)}
     @IBAction func a2_buttonPressed(_ sender: Any) {pathsForCoordinates(x: 1, y: 2)}
     @IBAction func a3_buttonPressed(_ sender: Any) {pathsForCoordinates(x: 1, y: 3)}
     @IBAction func a4_buttonPressed(_ sender: Any) {pathsForCoordinates(x: 1, y: 4)}
@@ -225,5 +249,4 @@ class ViewController: UIViewController {
     @IBAction func h6_buttonPressed(_ sender: Any) {pathsForCoordinates(x: 8, y: 6)}
     @IBAction func h7_buttonPressed(_ sender: Any) {pathsForCoordinates(x: 8, y: 7)}
     @IBAction func h8_buttonPressed(_ sender: Any) {pathsForCoordinates(x: 8, y: 8)}
-
 }
